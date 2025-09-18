@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="images.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honkai Star Rail Tournament League by IPC Organizer</title> 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+            background-image: url("https://images2.alphacoders.com/135/1355608.png"); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333;
+            background-attachment: fixed;
+        }
+        .logo-container {
+            margin: 20px auto;
+            padding: 10px;
+        }
+        h1 {
+            font-size: 2em;
+            color: #2c3e50;
+        }
+        h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        input[type="text"] {
+            width: 220px;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+            font-size: 1em;
+            color: #000;
+        }
+        .player-label {
+            color: white;
+            font-weight: bold;
+        }
+        .node-section {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .input-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        select {
+            width: 250px;
+            padding: 5px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.1);
+            margin-left: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .output-section {
+            margin-top: 30px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #ecf0f1;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            color: #2c3e50;
+        }
+        .player1-text {
+            color: blue;
+            font-weight: bold;
+        }
+        .player2-text {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Logo at the Beginning -->
+    <div class="logo-container">
+        <img src="sponsor.png" alt="Honkai Star Rail Logo" width="150"><br><br>
+        <img style="width: 700px;" src="Honkai-_Star_Rail_logo.jpg" alt="Sponsor Logo">
+    </div>
+
+    <h1 style="color: yellow;">Honkai Star Rail Tournament League by IPC Organizer </h1>
+
+    <!-- Input Section -->
+    <div>
+        <label for="player1" class="player-label">Player 1 Name: </label>
+        <input type="text" id="player1" placeholder="Enter Player 1 Name"><br>
+
+        <label for="player2" class="player-label">Player 2 Name: </label>
+        <input type="text" id="player2" placeholder="Enter Player 2 Name"><br>
+    </div>
+
+    <!-- Node Sections for Inputs -->
+    <div id="node1" class="node-section">
+        <h2>Node 1</h2>
+        <div id="node1Inputs"></div>
+    </div>
+
+    <div id="node2" class="node-section">
+        <h2>Node 2</h2>
+        <div id="node2Inputs"></div>
+    </div>
+
+    <button onclick="processInputs()">Submit</button>
+
+    <!-- Output Section -->
+    <div id="output" class="output-section"></div>
+
+    <script>
+      const characterList = [
+    " ", "Acheron", "Argenti", "Aglaea","Anaxa","Archer", "Arlan", "Asta", "Aventurine", "Bailu", "Black Swan", "Blade", "Boothill", "Bronya",
+     "Castorice", "Cerydra", "Cipher",
+    "Clara", "Dan Heng", "Dan Heng IL", "Dr. Ratio", "Feixiao", "Firefly", "Fugue", "Fu Xuan", "Gallagher", "Guinaifen",
+    "Hanya", "Herta", "Himeko", "Hook", "Huo Huo","Hyacine","Hysilens", "Jade", "Jiaoqiu", "Jing Liu", "Jing Yuan", "Kafka", "Lingsha", "Lynx", "Luocha",
+    "March 7th(Hunt)", "March 7th(Preservation)", "Misha", "Moze", "Mydei", "Natasha", "Pela","Phainon", "Qingque", "Rappa", "Robin",
+    "Ruan Mei", "Saber","Seele", "Serval", "Silver Wolf", "Sampo", "Sparkle", "Sushang", "Sunday", "Tingyun", "Topaz", "Trailblazer(Destruction)",
+    "Trailblazer(Harmony)", "Trailblazer(Preservation)", "Traiblazer(Remembrance)", "Tribbie",
+     "The Herta", "Welt", "Xueyi", "Yanqing", "Yukong", "Yunli"
+];
+
+
+
+        const nodeStructure = [
+            ["Player 1 ban", "Player 2 ban", "Player 2 pick", "Player 1 pick", "Player 1 pick", "Player 2 pick", 
+             "Player 2 ban", "Player 1 ban", "Player 1 pick", "Player 2 pick", "Player 2 ban", "Player 1 ban", 
+             "Player 2 pick", "Player 1 pick"],
+            ["Player 2 ban", "Player 1 ban", "Player 1 pick", "Player 2 pick", "Player 2 pick", "Player 1 pick", 
+             "Player 1 ban", "Player 2 ban", "Player 2 pick", "Player 1 pick", "Player 1 ban", "Player 2 ban", 
+             "Player 1 pick", "Player 2 pick"]
+        ];
+
+        function createInputs() {
+            for (let node = 0; node < 2; node++) {
+                const container = document.getElementById(`node${node + 1}Inputs`);
+                nodeStructure[node].forEach((labelText, index) => {
+                    const inputGroup = document.createElement("div");
+                    inputGroup.className = "input-group";
+
+                    const inputLabel = document.createElement("label");
+                    inputLabel.innerHTML = labelText.includes("Player 1")
+                        ? `<span class="player1-text">${labelText}</span> character: `
+                        : `<span class="player2-text">${labelText}</span> character: `;
+                    
+                    const select = document.createElement("select");
+                    select.id = `node${node + 1}_${index}`;
+                    
+                    characterList.forEach(character => {
+                        const option = document.createElement("option");
+                        option.value = character;
+                        option.text = character;
+                        select.appendChild(option);
+                    });
+
+                    inputGroup.appendChild(inputLabel);
+                    inputGroup.appendChild(select);
+                    container.appendChild(inputGroup);
+                });
+            }
+        }
+
+        function processInputs() {
+            const player1 = document.getElementById("player1").value || "Player 1";
+            const player2 = document.getElementById("player2").value || "Player 2";
+            let output = "<h2>Results</h2>";
+
+            for (let node = 0; node < 2; node++) {
+                let bans = [];
+                let picksPlayer1 = [];
+                let picksPlayer2 = [];
+
+                nodeStructure[node].forEach((label, index) => {
+                    const input = document.getElementById(`node${node + 1}_${index}`).value;
+                    if (label.includes("ban")) {
+                        bans.push(input);
+                    } else if (label.includes("pick")) {
+                        if (label.includes("Player 1")) {
+                            picksPlayer1.push(input);
+                        } else {
+                            picksPlayer2.push(input);
+                        }
+                    }
+                });
+
+                output += `<div><strong>Node ${node + 1}</strong></div>`;
+                output += `<div><strong>Bans:</strong> ${bans.join(", ")}</div>`;
+                output += `<div><span class="player1-text">${player1}'s Picks:</span> ${picksPlayer1.join(", ")}</div>`;
+                output += `<div><span class="player2-text">${player2}'s Picks:</span> ${picksPlayer2.join(", ")}</div><br>`;
+            }
+
+            document.getElementById("output").innerHTML = output;
+        }
+
+        createInputs();
+    </script>
+    <h1 style="color: white;">This is an Ad by Michele from Strinova<br></h1>
+    <video src="shindago.mp4" autoplay muted loop width = 750></video><br>
+    <audio src="lobby.mp3" autoplay loop width = 750></audio><br>
+
+   
+</body>
+</html>
